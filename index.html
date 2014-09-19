@@ -1,0 +1,43 @@
+<html>
+	<head>
+		<title>Mason's first canvas practice</title>
+		<meta charset="utf-8">
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+	</head>
+<body>
+	<canvas id="myCanvas" width="500" height="500">
+		
+	</canvas>	
+	<script>
+	$(function() {
+		var canvas = document.getElementById("myCanvas");
+		var context = canvas.getContext("2d");
+
+		var image = new Image();
+		image.src = "img/sample.jpg";
+
+		$(image).load(function() {
+			context.drawImage(image, 0, 0);			
+		});
+
+		$(canvas).click(function(e) {
+			//Get the current coordinate of the canvas
+			var canvasOffset = $(canvas).offset();
+			//x position of the cursor on canvas
+			var canvasX = Math.floor(e.pageX - canvasOffset.left);
+			//y position of the cursor on canvas
+			var canvasY = Math.floor(e.pageY - canvasOffset.top);
+
+			var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+			var pixels = imageData.data;
+			var pixelRedIndex = ((canvasY - 1) * (imageData.width * 4)) + ((canvasX - 1) * 4);
+			var pixelcolor = "rgba(" + pixels[pixelRedIndex] + ", " + pixels[pixelRedIndex + 1] + ", " + pixels[pixelRedIndex+2] + ", " + pixels[pixelRedIndex + 3] + ")";
+
+			$("body").css("backgroundColor", pixelcolor);
+		});
+	});
+		
+
+	</script>
+</body>
+</html>
